@@ -1,4 +1,12 @@
 *.o
 *.exe
-a.out
-*.png
+*.out
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.synctex.gz
+*.cut
+*.toc
