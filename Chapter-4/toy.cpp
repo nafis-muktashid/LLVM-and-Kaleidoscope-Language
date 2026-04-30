@@ -1,4 +1,4 @@
-#include "../Kaleidoscope.h"
+#include "../KaleidoscopeJIT.h"
 #include <llvm/ADT/APFloat.h>
 #include <llvm/ADT/STLExtras.h>
 #include <llvm/IR/BasicBlock.h>
@@ -499,6 +499,8 @@ Value *BinaryExprAST::codegen() {
         L = Builder->CreateFCmpULT(L, R, "cmptmp");
         // Convert bool 0/1 to double 0.0 or 1.0
         return Builder->CreateUIToFP(L, Type::getDoubleTy(*TheContext), "booltmp");
+    case '%':
+        return Builder->CreateFRem(L, R, "modtmp");
     default:
         return LogErrorV("invalid binary operator");
     }
@@ -741,6 +743,8 @@ int main() {
     BinopPrecedence['+'] = 20;
     BinopPrecedence['-'] = 20;
     BinopPrecedence['*'] = 40; // highest.
+
+    BinopPrecedence['%'] = 100;
 
     // Prime the first token.
     fprintf(stderr, "ready> ");

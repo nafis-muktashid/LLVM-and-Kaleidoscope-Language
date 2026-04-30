@@ -61,7 +61,11 @@ enum Token {
 
   // operators
   tok_binary = -11,
-  tok_unary = -12
+  tok_unary = -12,
+
+  // keywords
+  tok_true = -20,
+  tok_false = -21,
 };
 
 static std::string IdentifierStr; // Filled in if tok_identifier
@@ -98,6 +102,10 @@ static int gettok() {
       return tok_binary;
     if (IdentifierStr == "unary")
       return tok_unary;
+    if (IdentifierStr == "true")
+      return tok_true;
+    if (IdentifierStr == "false")
+      return tok_false;
     return tok_identifier;
   }
 
@@ -466,6 +474,12 @@ static std::unique_ptr<ExprAST> ParsePrimary() {
     return ParseIfExpr();
   case tok_for:
     return ParseForExpr();
+  case tok_true:
+    getNextToken();
+    return std::make_unique<NumberExprAST>(1.0);
+  case tok_false:
+    getNextToken();
+    return std::make_unique<NumberExprAST>(0.0);
   }
 }
 
